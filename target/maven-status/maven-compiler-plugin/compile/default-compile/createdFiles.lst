@@ -1,0 +1,7 @@
+model\Pessoa.class
+model\Entrega.class
+model\Funcionario.class
+model\Cliente.class
+model\Pedido.class
+model\Cardapio.class
+model\Caixa.class
