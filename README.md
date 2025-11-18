@@ -9,4 +9,4 @@ Este sistema foi criado para modelar um sistema de delivery de comida em um rest
 - **Entrega**: Quando o status do pedido for "Pronto", será encaminhado para o Funcionário que realizará a entrega ou diretamente para o Cliente, caso opte pela retirada no local.
 - **Herança**: Um funcionário pode ser cliente também, utilizando herança da classe Cliente.
 
-<img src="diagrama.png" height="400" width="800">
+<img src="diagrama.png" height="600" width="800">
