@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import javax.swing.JOptionPane;
 import model.Cliente;
+import model.dao.ClienteDAO;
 
 /**
  *
@@ -20,6 +21,7 @@ public class CadastroCliente extends javax.swing.JDialog {
      * Creates new form CadastroCliente
      */
     private Cliente cliente;
+    private ClienteDAO dao;
 
     public CadastroCliente(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -48,8 +50,7 @@ public class CadastroCliente extends javax.swing.JDialog {
         txtEndereco = new javax.swing.JTextField();
         txtTelefone = new javax.swing.JTextField();
         txtNome = new javax.swing.JTextField();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jLabel5 = new javax.swing.JLabel();
 
         bsalvar.setText("Salvar");
         bsalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -97,6 +98,9 @@ public class CadastroCliente extends javax.swing.JDialog {
             }
         });
 
+        jLabel5.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
+        jLabel5.setText("Cadastro de Pedido");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -128,11 +132,17 @@ public class CadastroCliente extends javax.swing.JDialog {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(txtEndereco))))
                 .addGap(29, 29, 29))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(85, 85, 85)
+                .addComponent(jLabel5)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(43, 43, 43)
+                .addContainerGap()
+                .addComponent(jLabel5)
+                .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -169,7 +179,7 @@ public class CadastroCliente extends javax.swing.JDialog {
             this.cliente.setEndereco(txtEndereco.getText());
             this.cliente.setTelefone(txtTelefone.getText());
             
-            
+            dao.persist(cliente);
             this.dispose();
         } catch (DateTimeParseException e1){
             JOptionPane.showMessageDialog(rootPane, "Data inválida!! Informe data no formato dd-mm-yyyy\n"+e1);
@@ -266,6 +276,7 @@ public class CadastroCliente extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JTextField txtCpf;
     private javax.swing.JTextField txtEndereco;
     private javax.swing.JTextField txtNome;

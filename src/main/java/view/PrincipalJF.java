@@ -28,23 +28,15 @@ public class PrincipalJF extends javax.swing.JFrame {
 
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        miVendedor = new javax.swing.JMenuItem();
         miCliente = new javax.swing.JMenuItem();
         miVeiculo = new javax.swing.JMenuItem();
+        mifuncionario = new javax.swing.JMenuItem();
         miVenda = new javax.swing.JMenu();
         miTelaVenda = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jMenu1.setText("Cadastro");
-
-        miVendedor.setText("Vendedor");
-        miVendedor.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                miVendedorActionPerformed(evt);
-            }
-        });
-        jMenu1.add(miVendedor);
 
         miCliente.setText("Cliente");
         miCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -54,7 +46,7 @@ public class PrincipalJF extends javax.swing.JFrame {
         });
         jMenu1.add(miCliente);
 
-        miVeiculo.setText("Veículo");
+        miVeiculo.setText("Produto");
         miVeiculo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miVeiculoActionPerformed(evt);
@@ -62,16 +54,24 @@ public class PrincipalJF extends javax.swing.JFrame {
         });
         jMenu1.add(miVeiculo);
 
+        mifuncionario.setText("Funcionario");
+        mifuncionario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mifuncionarioActionPerformed(evt);
+            }
+        });
+        jMenu1.add(mifuncionario);
+
         jMenuBar1.add(jMenu1);
 
-        miVenda.setText("Venda");
+        miVenda.setText("Pedido");
         miVenda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miVendaActionPerformed(evt);
             }
         });
 
-        miTelaVenda.setText("Realizar Venda");
+        miTelaVenda.setText("Realizar Pedido");
         miTelaVenda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 miTelaVendaActionPerformed(evt);
@@ -97,19 +97,14 @@ public class PrincipalJF extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void miVendedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVendedorActionPerformed
-        ListaVendedorJF telaVendedor = new ListaVendedorJF();
-        telaVendedor.setVisible(true);
-    }//GEN-LAST:event_miVendedorActionPerformed
-
     private void miClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miClienteActionPerformed
         ListaClienteJF telaCliente = new ListaClienteJF();
         telaCliente.setVisible(true);
     }//GEN-LAST:event_miClienteActionPerformed
 
     private void miVeiculoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVeiculoActionPerformed
-        ListaVeiculoJF telaVeiculo = new ListaVeiculoJF();
-        telaVeiculo.setVisible(true);
+        ListaItens telai = new ListaItens();
+        telai.setVisible(true);
     }//GEN-LAST:event_miVeiculoActionPerformed
 
     private void miVendaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_miVendaActionPerformed
@@ -120,6 +115,12 @@ public class PrincipalJF extends javax.swing.JFrame {
         ListaVendas telaVendas = new ListaVendas();
         telaVendas.setVisible(true);
     }//GEN-LAST:event_miTelaVendaActionPerformed
+
+    private void mifuncionarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mifuncionarioActionPerformed
+        // TODO add your handling code here:
+        CadastroFuncionario func = new CadastroFuncionario(this, rootPaneCheckingEnabled);
+        func.setVisible(true);
+    }//GEN-LAST:event_mifuncionarioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -163,6 +164,6 @@ public class PrincipalJF extends javax.swing.JFrame {
     private javax.swing.JMenuItem miTelaVenda;
     private javax.swing.JMenuItem miVeiculo;
     private javax.swing.JMenu miVenda;
-    private javax.swing.JMenuItem miVendedor;
+    private javax.swing.JMenuItem mifuncionario;
     // End of variables declaration//GEN-END:variables
 }

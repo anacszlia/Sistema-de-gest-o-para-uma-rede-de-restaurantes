@@ -10,14 +10,17 @@ import javax.persistence.*;
  * @author anacs
  */
 @Entity
-@Table(name="funcionarios")
-public class Funcionario extends Cliente{
-  
-    @Column(name="cargo")
+@Table(name = "funcionarios")
+public class Funcionario extends Cliente {
+    
+    @Column(name = "cargo")
     private String cargo;
 
-   
-
-    public String getCargo() { return cargo; }
-    public void setCargo(String cargo) { this.cargo = cargo; }
+    public String getCargo() { 
+        return cargo; 
+    }
+    
+    public void setCargo(String cargo) { 
+        this.cargo = cargo; 
+    }
 }

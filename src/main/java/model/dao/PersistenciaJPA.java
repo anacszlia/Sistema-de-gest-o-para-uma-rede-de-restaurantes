@@ -23,7 +23,7 @@ public class PersistenciaJPA implements InterfaceBD {
     public PersistenciaJPA() {
         //parametro: é o nome da unidade de persistencia (Persistence Unit)
         factory
-                = Persistence.createEntityManagerFactory("pu_concessionaria");
+                = Persistence.createEntityManagerFactory("pu_restaurante");
         //conecta no bd e executa a estratégia de geração.
         entity = factory.createEntityManager();
     }
@@ -50,9 +50,6 @@ public class PersistenciaJPA implements InterfaceBD {
         entity = getEntityManager();
         try {
             entity.getTransaction().begin();
-            if (!entity.contains(o)) {
-                o = entity.merge(o); // Anexa o objeto ao contexto de persistência, se necessário
-            }
             entity.persist(o);
             entity.getTransaction().commit();
         } catch (Exception e) {
@@ -60,7 +57,6 @@ public class PersistenciaJPA implements InterfaceBD {
                 entity.getTransaction().rollback();
             }
             Logger.getLogger(PersistenciaJPA.class.getName()).log(Level.SEVERE, "Erro ao persistir a entidade: " + o.getClass().getSimpleName(), e);
-            e.printStackTrace(); // Isso imprimirá o erro completo no console
             throw e;
         }
     }

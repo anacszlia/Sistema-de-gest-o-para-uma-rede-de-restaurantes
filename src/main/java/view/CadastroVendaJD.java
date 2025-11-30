@@ -8,17 +8,20 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.List;
 import javax.swing.JOptionPane;
 import model.Cliente;
-import model.FormaContrato;
-import model.FormaPgto;
-import model.Veiculo;
-import model.Venda;
-import model.Vendedor;
+import model.Pagamento;
+import model.Produto;
 import model.dao.ClienteDAO;
-import model.dao.VeiculoDAO;
-import model.dao.VendaDAO;
-import model.dao.VendedorDAO;
+import model.dao.PedidoDAO;
+import model.dao.ProdutoDAO;
+import static model.Pagamento.listarFormasPagamento;
+import model.Pedido;
+
+
 
 /**
  *
@@ -27,12 +30,12 @@ import model.dao.VendedorDAO;
 public class CadastroVendaJD extends javax.swing.JDialog {
 
     ClienteDAO daoCliente;
-    VendedorDAO daoVendedor;
-    VeiculoDAO daoVeiculo;
+    ProdutoDAO daoProduto;
+    PedidoDAO daoPedido;
     
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
     
-    private Venda venda;
+    private Pedido venda;
     /**
      * Creates new form CadastroVendaJD
      */
@@ -41,36 +44,30 @@ public class CadastroVendaJD extends javax.swing.JDialog {
         initComponents();
         
         daoCliente = new ClienteDAO();
-        daoVeiculo = new VeiculoDAO();
-        daoVendedor = new VendedorDAO();
+        daoProduto = new ProdutoDAO();
+        daoPedido = new PedidoDAO();
+        
+        // Tornar campos não editáveis
+        txtDataVenda.setEditable(false);
+        txtValor.setEditable(false);
+        
+        
+        txtDataVenda.setText(LocalDateTime.now().format(formatter));
         
         loadFormaPgto();
-        loadFormaContrato();
-        
         loadClientes();
-        loadVendedores();
-        loadVeiculos();
+        loadItens();
         
-        txtDataVenda.setText(LocalDateTime.now().format(formatter)); // Preenche data atual
-        
-        // Listener para atualizar valor quando veículo for alterado
-        cmbVeiculo.addActionListener(e -> {
-            Veiculo veiculoSelecionado = (Veiculo) cmbVeiculo.getSelectedItem();
-            if(veiculoSelecionado != null){
-                txtValor.setText(String.valueOf(veiculoSelecionado.getValor()));
-            }
+        //listener para calcular valor quando produto for selecionado
+        cmbProduto.addActionListener(e -> {
+            calcularValorTotal();
         });
     }
     
     public void loadFormaPgto(){
-        for(FormaPgto obj: FormaPgto.values()){
-            cmbFormaPgto.addItem(obj);
-        }
-    }
-    
-    public void loadFormaContrato(){
-         for(FormaContrato obj: FormaContrato.values()){
-            cmbFormaContrato.addItem(obj);
+        List<String> formas = listarFormasPagamento();
+        for(String forma: formas){
+            cmbFormaPgto.addItem(forma);
         }
     }
     
@@ -79,17 +76,21 @@ public class CadastroVendaJD extends javax.swing.JDialog {
             cmbCliente.addItem(obj);
         }
     }
-
-    public void loadVendedores(){
-        for(Vendedor obj: daoVendedor.listaVendedores()){
-            cmbVendedor.addItem(obj);
+    
+    public void loadItens(){
+        for(Produto obj: daoProduto.listaProdutos()){
+            cmbProduto.addItem(obj);
         }
     }
-
-    public void loadVeiculos(){
-        for(Veiculo obj: daoVeiculo.listaVeiculos()){
-            cmbVeiculo.addItem(obj);
+    
+    private double calcularValorTotal(){
+        Produto produtoSelecionado = (Produto) cmbProduto.getSelectedItem();
+        if(produtoSelecionado != null){
+            double valor = produtoSelecionado.getPreco();
+            txtValor.setText(String.format("%.2f", valor));
+            return valor;
         }
+        return 0.0;
     }
 
     /**
@@ -106,37 +107,41 @@ public class CadastroVendaJD extends javax.swing.JDialog {
         txtDataVenda = new javax.swing.JTextField();
         lblValor = new javax.swing.JLabel();
         txtValor = new javax.swing.JTextField();
-        lblFormaContrato = new javax.swing.JLabel();
-        cmbFormaContrato = new javax.swing.JComboBox<>();
         lblFormaPagamento = new javax.swing.JLabel();
         cmbFormaPgto = new javax.swing.JComboBox<>();
         cmbCliente = new javax.swing.JComboBox<>();
-        cmbVeiculo = new javax.swing.JComboBox<>();
-        cmbVendedor = new javax.swing.JComboBox<>();
+        cmbProduto = new javax.swing.JComboBox<>();
         lblCliente = new javax.swing.JLabel();
         lblVeiculo = new javax.swing.JLabel();
-        lblVendedor = new javax.swing.JLabel();
         btnSalvar = new javax.swing.JButton();
         btnCancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
-        jLabel1.setText("Cadastro de Venda");
+        jLabel1.setText("Cadastro de Pedido");
 
         lblDtVenda.setText("Data Venda:");
 
         lblValor.setText("Valor: ");
 
-        lblFormaContrato.setText("Forma de Contrato:");
+        txtValor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtValorActionPerformed(evt);
+            }
+        });
 
         lblFormaPagamento.setText("Forma de Pagamento:");
 
+        cmbCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmbClienteActionPerformed(evt);
+            }
+        });
+
         lblCliente.setText("Cliente:");
 
-        lblVeiculo.setText("Veículo:");
-
-        lblVendedor.setText("Vendedor:");
+        lblVeiculo.setText("Produto:");
 
         btnSalvar.setText("Salvar");
         btnSalvar.addActionListener(new java.awt.event.ActionListener() {
@@ -167,22 +172,14 @@ public class CadastroVendaJD extends javax.swing.JDialog {
                         .addGroup(layout.createSequentialGroup()
                             .addGap(4, 4, 4)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(lblFormaContrato)
                                 .addComponent(lblCliente)
                                 .addComponent(lblVeiculo)
-                                .addComponent(lblVendedor)
                                 .addComponent(lblFormaPagamento))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(18, 18, 18)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(cmbVendedor, javax.swing.GroupLayout.Alignment.TRAILING, 0, 168, Short.MAX_VALUE)
-                                        .addComponent(cmbVeiculo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(cmbCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(cmbFormaPgto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(19, 19, 19)
-                                    .addComponent(cmbFormaContrato, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGap(18, 18, 18)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(cmbProduto, 0, 168, Short.MAX_VALUE)
+                                .addComponent(cmbCliente, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(cmbFormaPgto, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addComponent(jLabel1)
                             .addGap(33, 33, 33))
@@ -208,11 +205,7 @@ public class CadastroVendaJD extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblValor)
                     .addComponent(txtValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(12, 12, 12)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblFormaContrato)
-                    .addComponent(cmbFormaContrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
+                .addGap(44, 44, 44)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblFormaPagamento)
                     .addComponent(cmbFormaPgto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -222,13 +215,9 @@ public class CadastroVendaJD extends javax.swing.JDialog {
                     .addComponent(lblCliente))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cmbVeiculo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbProduto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblVeiculo, javax.swing.GroupLayout.Alignment.TRAILING))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cmbVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblVendedor))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 44, Short.MAX_VALUE)
                 .addComponent(btnSalvar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnCancelar)
@@ -243,42 +232,41 @@ public class CadastroVendaJD extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarActionPerformed
-        
-        
         try {
-            // 1 - instanciar o objeto do tipo Venda
-            venda = new Venda();
+            if(cmbCliente.getSelectedItem() == null || cmbProduto.getSelectedItem() == null){
+                JOptionPane.showMessageDialog(this, "Selecione cliente e produto!", "Erro", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             
-            // 2 - setar os valores dos campos txt... para o objeto  venda
+            venda = new Pedido();
             
-            double valor = Double.parseDouble(txtValor.getText()
-                    .replace(",", "."));
-            LocalDateTime dataVenda = LocalDateTime.parse(txtDataVenda.getText(), formatter);
-
-            venda.setValorVenda(valor);
-            venda.setDataVenda(dataVenda);
-            venda.setFormaContrato((FormaContrato) cmbFormaContrato.getSelectedItem());
-            venda.setFormaPgto((FormaPgto) cmbFormaPgto.getSelectedItem());
-            venda.setCliente((Cliente) cmbCliente.getSelectedItem());
-            venda.setVendedor((Vendedor) cmbVendedor.getSelectedItem());
-            venda.setVeiculo((Veiculo) cmbVeiculo.getSelectedItem());
-
+            double valor = Double.parseDouble(txtValor.getText().replace(",", "."));
             
-            // 3 - fechar a aplicação
+            venda.setValorTotal(valor);
+            venda.setStatus("Pendente");
+            venda.setCliente(((Cliente) cmbCliente.getSelectedItem()));
+            
+            daoPedido.persist(venda);
+            
+            JOptionPane.showMessageDialog(this, "Pedido salvo com sucesso!");
             this.dispose();
-
-
+            
         } catch (NumberFormatException e) {
             venda = null;
-            JOptionPane.showMessageDialog(this, "Valor inválido. Digite um valor válido.", "Erro", JOptionPane.ERROR_MESSAGE);
-        } catch (DateTimeParseException e) {
-            venda = null;
-            JOptionPane.showMessageDialog(this, "Data inválida. Use o formato: dd-MM-yyyy HH:mm", "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Valor inválido!", "Erro", JOptionPane.ERROR_MESSAGE);
         } catch (Exception e) {
             venda = null;
-            JOptionPane.showMessageDialog(this, "Erro ao salvar venda: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Erro ao salvar pedido: " + e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnSalvarActionPerformed
+
+    private void cmbClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmbClienteActionPerformed
+
+    private void txtValorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtValorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtValorActionPerformed
 
     /**
      * @param args the command line arguments
@@ -328,42 +316,32 @@ public class CadastroVendaJD extends javax.swing.JDialog {
     private javax.swing.JButton btnCancelar;
     private javax.swing.JButton btnSalvar;
     private javax.swing.JComboBox<Cliente> cmbCliente;
-    private javax.swing.JComboBox<FormaContrato> cmbFormaContrato;
-    private javax.swing.JComboBox<FormaPgto> cmbFormaPgto;
-    private javax.swing.JComboBox<Veiculo> cmbVeiculo;
-    private javax.swing.JComboBox<Vendedor> cmbVendedor;
+    private javax.swing.JComboBox<String> cmbFormaPgto;
+    private javax.swing.JComboBox<Produto> cmbProduto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblCliente;
     private javax.swing.JLabel lblDtVenda;
-    private javax.swing.JLabel lblFormaContrato;
     private javax.swing.JLabel lblFormaPagamento;
     private javax.swing.JLabel lblValor;
     private javax.swing.JLabel lblVeiculo;
-    private javax.swing.JLabel lblVendedor;
     private javax.swing.JTextField txtDataVenda;
     private javax.swing.JTextField txtValor;
     // End of variables declaration//GEN-END:variables
 
-    public Venda getVenda() {
+    public Pedido getPedido() {
         return venda;
     }
 
-    public void setVenda(Venda venda) {
-        this.venda = venda;
-        if(venda != null){
+    public void setPedido(Pedido pedido) {
+        this.venda = pedido;
+        if(pedido != null){
             carregarDadosVenda();
         }
     }
     
     private void carregarDadosVenda(){
         if(venda != null){
-            txtDataVenda.setText(venda.getDataVenda().format(formatter));
-            txtValor.setText(String.valueOf(venda.getValorVenda()));
-            cmbFormaContrato.setSelectedItem(venda.getFormaContrato());
-            cmbFormaPgto.setSelectedItem(venda.getFormaPgto());
-            cmbCliente.setSelectedItem(venda.getCliente());
-            cmbVendedor.setSelectedItem(venda.getVendedor());
-            cmbVeiculo.setSelectedItem(venda.getVeiculo());
+            txtValor.setText(String.format("%.2f", venda.getValorTotal()));
         }
     }
 }

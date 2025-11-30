@@ -35,26 +35,15 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="lblFormaContrato" min="-2" max="-2" attributes="0"/>
                               <Component id="lblCliente" alignment="1" min="-2" max="-2" attributes="0"/>
                               <Component id="lblVeiculo" alignment="1" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblVendedor" alignment="1" min="-2" max="-2" attributes="0"/>
                               <Component id="lblFormaPagamento" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                      <Component id="cmbVendedor" alignment="1" pref="168" max="32767" attributes="0"/>
-                                      <Component id="cmbVeiculo" max="32767" attributes="0"/>
-                                      <Component id="cmbCliente" max="32767" attributes="0"/>
-                                      <Component id="cmbFormaPgto" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
-                                  <Component id="cmbFormaContrato" min="-2" pref="167" max="-2" attributes="0"/>
-                              </Group>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="cmbProduto" pref="168" max="32767" attributes="0"/>
+                              <Component id="cmbCliente" max="32767" attributes="0"/>
+                              <Component id="cmbFormaPgto" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
@@ -91,12 +80,7 @@
                   <Component id="lblValor" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtValor" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblFormaContrato" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cmbFormaContrato" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblFormaPagamento" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cmbFormaPgto" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -108,15 +92,10 @@
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="cmbVeiculo" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="cmbProduto" alignment="1" min="-2" max="-2" attributes="0"/>
                   <Component id="lblVeiculo" alignment="1" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="cmbVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="10" max="32767" attributes="0"/>
+              <EmptySpace pref="44" max="32767" attributes="0"/>
               <Component id="btnSalvar" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="btnCancelar" min="-2" max="-2" attributes="0"/>
@@ -131,7 +110,7 @@
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Helvetica Neue" size="24" style="1"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Cadastro de Venda"/>
+        <Property name="text" type="java.lang.String" value="Cadastro de Pedido"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblDtVenda">
@@ -147,21 +126,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtValor">
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblFormaContrato">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Forma de Contrato:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="cmbFormaContrato">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="0"/>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;FormaContrato&gt;"/>
-      </AuxValues>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtValorActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblFormaPagamento">
       <Properties>
@@ -175,7 +142,7 @@
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;FormaPgto&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JComboBox" name="cmbCliente">
@@ -184,28 +151,21 @@
           <StringArray count="0"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cmbClienteActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Cliente&gt;"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JComboBox" name="cmbVeiculo">
+    <Component class="javax.swing.JComboBox" name="cmbProduto">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>
         </Property>
       </Properties>
       <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Veiculo&gt;"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="cmbVendedor">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="0"/>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Vendedor&gt;"/>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;Produto&gt;"/>
       </AuxValues>
     </Component>
     <Component class="javax.swing.JLabel" name="lblCliente">
@@ -215,12 +175,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblVeiculo">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Ve&#xed;culo:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lblVendedor">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Vendedor:"/>
+        <Property name="text" type="java.lang.String" value="Produto:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnSalvar">

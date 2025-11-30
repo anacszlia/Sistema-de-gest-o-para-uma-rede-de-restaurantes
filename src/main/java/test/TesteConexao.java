@@ -16,7 +16,7 @@ import javax.persistence.Persistence;
  */
 public class TesteConexao {
     public static void main(String[] args) {
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu_concessionaria");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("pu_restaurante");
         EntityManager em = emf.createEntityManager();
         if (em.isOpen()) {
             System.out.println("✅ Conexão aberta com sucesso!");

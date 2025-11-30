@@ -5,6 +5,7 @@
 package view;
 
 import javax.swing.JOptionPane;
+import model.CategoriasCardapio;
 import model.Produto;
 import model.dao.ProdutoDAO;
 
@@ -25,6 +26,33 @@ public class CadastroProduto extends javax.swing.JDialog {
         initComponents();
         produto = new Produto();
         produtoDAO = new ProdutoDAO();
+        carregarCategorias();
+    }
+    
+    public CadastroProduto(java.awt.Frame parent, boolean modal, Produto produtoEdicao) {
+        super(parent, modal);
+        initComponents();
+        this.produto = produtoEdicao;
+        produtoDAO = new ProdutoDAO();
+        carregarCategorias();
+        preencherCampos();
+    }
+    
+    private void preencherCampos() {
+        if (produto != null) {
+            txtNome.setText(produto.getNome());
+            txtDescricao.setText(produto.getDescricao());
+            txtPreco.setText(String.valueOf(produto.getPreco()));
+            if (produto.getCategoria() != null) {
+                cmdcategoria.setSelectedItem(produto.getCategoria().name());
+            }
+        }
+    }
+    
+    private void carregarCategorias() {
+        for (CategoriasCardapio categoria : CategoriasCardapio.values()) {
+            cmdcategoria.addItem(categoria.name());
+        }
     }
     
 
@@ -47,8 +75,7 @@ public class CadastroProduto extends javax.swing.JDialog {
         txtDescricao = new javax.swing.JTextField();
         txtPreco = new javax.swing.JTextField();
         cmdcategoria = new javax.swing.JComboBox<>();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jLabel6 = new javax.swing.JLabel();
 
         jLabel1.setText("Descricao:");
 
@@ -78,41 +105,56 @@ public class CadastroProduto extends javax.swing.JDialog {
             }
         });
 
+        txtPreco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPrecoActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setFont(new java.awt.Font("Helvetica Neue", 1, 24)); // NOI18N
+        jLabel6.setText("Cadastro de Produto");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(23, 23, 23)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(19, 19, 19)
-                        .addComponent(bcancelar)
-                        .addGap(64, 64, 64)
-                        .addComponent(bsalvar))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel2)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addGap(97, 97, 97)
-                            .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1)
+                                .addGap(131, 131, 131)
+                                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel6)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(19, 19, 19)
+                                        .addComponent(bcancelar)
+                                        .addGap(64, 64, 64)
+                                        .addComponent(bsalvar))
+                                    .addComponent(jLabel4))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2)
+                                .addGap(149, 149, 149)
+                                .addComponent(txtDescricao, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)))
+                        .addGap(58, 58, 58))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addGap(97, 97, 97)
-                        .addComponent(cmdcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(146, Short.MAX_VALUE))
+                        .addComponent(jLabel3)
+                        .addGap(152, 152, 152)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(cmdcategoria, 0, 193, Short.MAX_VALUE)
+                            .addComponent(txtPreco))
+                        .addGap(69, 69, 69))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(44, 44, 44)
+                .addComponent(jLabel6)
+                .addGap(12, 12, 12)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -120,11 +162,14 @@ public class CadastroProduto extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(txtDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel3))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(txtPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(cmdcategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -151,11 +196,17 @@ public class CadastroProduto extends javax.swing.JDialog {
         try {
             produto.setNome(txtNome.getText());
             produto.setDescricao(txtDescricao.getText());
-            produto.setCategoria(cmdcategoria.getSelectedItem().toString());
+            String categoriaSelecionada = cmdcategoria.getSelectedItem().toString();
+            produto.setCategoria(CategoriasCardapio.valueOf(categoriaSelecionada));
             produto.setPreco(Double.parseDouble(txtPreco.getText()));
             
-            produtoDAO.persist(produto);
-            JOptionPane.showMessageDialog(this, "Produto cadastrado com sucesso!");
+            if (produto.getIdProduto() == 0) {
+                produtoDAO.persist(produto);
+                JOptionPane.showMessageDialog(this, "Produto cadastrado com sucesso!");
+            } else {
+                produtoDAO.atualizar(produto);
+                JOptionPane.showMessageDialog(this, "Produto atualizado com sucesso!");
+            }
             this.dispose();
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Preço deve ser um número válido!");
@@ -163,6 +214,10 @@ public class CadastroProduto extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(this, "Erro ao cadastrar produto: " + e.getMessage());
         }
     }//GEN-LAST:event_bsalvarActionPerformed
+
+    private void txtPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPrecoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPrecoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -213,8 +268,13 @@ public class CadastroProduto extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JTextField txtDescricao;
     private javax.swing.JTextField txtNome;
     private javax.swing.JTextField txtPreco;
     // End of variables declaration//GEN-END:variables
+    
+    public Produto getProduto() {
+        return produto;
+    }
 }

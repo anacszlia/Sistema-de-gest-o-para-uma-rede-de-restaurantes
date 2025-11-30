@@ -8,33 +8,47 @@ package model;
  *
  * @author anacs
  */
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
-import org.eclipse.persistence.jpa.jpql.parser.DateTime;
 
 @Entity
 @Table(name = "pedidos")
-public class Pedido {
+public class Pedido implements Serializable {
     @Id
+    @Column(name = "id_pedido")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private DateTime dataHora;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "data_hora")
+    private Date dataHora;
+    
+    @Column(name = "status")
     private String status;
+    
+    @Column(name = "valor_total")
     private double valorTotal;
     
     @ManyToOne
-    @JoinColumn(name = "idCliente")
-    private int idCliente;
+    @JoinColumn(name = "id_cliente")
+    private Cliente cliente;
     
     @ManyToOne
-    @JoinColumn(name = "idFuncionario")
-    private int idFuncionario;
+    @JoinColumn(name = "id_funcionario")
+    private Funcionario funcionario;
+    
+    @Column(name = "local_entrega")
     private String localEntrega;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ItemPedido> itens = new ArrayList<>();
+    
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_pagamento")
+    private Pagamento pagamento;
 
     public boolean verificaCupom() { return true; }
     public void calculaValorTotal() {}
@@ -50,8 +64,13 @@ public class Pedido {
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
 
-    public DateTime getDataHora() { return dataHora; }
-    //public void setDataHora(Date dataHora) { this.dataHora = dataHora; }
+    public Date getDataHora() { 
+        return dataHora; 
+    }
+    
+    public void setDataHora(Date dataHora) { 
+        this.dataHora = dataHora; 
+    }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
@@ -59,11 +78,37 @@ public class Pedido {
     public double getValorTotal() { return valorTotal; }
     public void setValorTotal(double valorTotal) { this.valorTotal = valorTotal; }
 
-    public int getIdCliente() { return idCliente; }
-    public void setIdCliente(int idCliente) { this.idCliente = idCliente; }
+    public Cliente getCliente() { 
+        return cliente; 
+    }
+    
+    public void setCliente(Cliente cliente) { 
+        this.cliente = cliente; 
+    }
 
-    public int getIdFuncionario() { return idFuncionario; }
-    public void setIdFuncionario(int idFuncionario) { this.idFuncionario = idFuncionario; }
+    public Funcionario getFuncionario() { 
+        return funcionario; 
+    }
+    
+    public void setFuncionario(Funcionario funcionario) { 
+        this.funcionario = funcionario; 
+    }
+    
+    public List<ItemPedido> getItens() {
+        return itens;
+    }
+    
+    public void setItens(List<ItemPedido> itens) {
+        this.itens = itens;
+    }
+    
+    public Pagamento getPagamento() {
+        return pagamento;
+    }
+    
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
+    }
 
     public String getLocalEntrega() { return localEntrega; }
     public void setLocalEntrega(String localEntrega) { this.localEntrega = localEntrega; }

@@ -4,6 +4,7 @@
  */
 package model;
 
+import java.io.Serializable;
 import javax.persistence.*;
 
 /**
@@ -12,14 +13,24 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "produtos")
-public class Produto {
+public class Produto implements Serializable {
     
     @Id
+    @Column(name = "id_produto")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idProduto;
+    
+    @Column(name = "nome")
     private String nome;
+    
+    @Column(name = "descricao")
     private String descricao;
-    private String categoria;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(name = "categoria")
+    private CategoriasCardapio categoria;
+    
+    @Column(name = "preco")
     private double preco;
 
     public int getIdProduto() { return idProduto; }
@@ -31,9 +42,19 @@ public class Produto {
     public String getDescricao() { return descricao; }
     public void setDescricao(String descricao) { this.descricao = descricao; }
 
-    public String getCategoria() { return categoria; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
+    public CategoriasCardapio getCategoria() { 
+        return categoria; 
+    }
+    
+    public void setCategoria(CategoriasCardapio categoria) { 
+        this.categoria = categoria; 
+    }
 
     public double getPreco() { return preco; }
     public void setPreco(double preco) { this.preco = preco; }
+    
+    @Override
+    public String toString() {
+        return nome + " - R$ " + String.format("%.2f", preco);
+    }
 }

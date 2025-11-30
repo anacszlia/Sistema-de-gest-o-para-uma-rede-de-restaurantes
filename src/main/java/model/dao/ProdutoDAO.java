@@ -14,7 +14,7 @@ public class ProdutoDAO extends PersistenciaJPA {
             return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new java.util.ArrayList<>();
         }
     }
     
@@ -27,6 +27,30 @@ public class ProdutoDAO extends PersistenciaJPA {
         } catch (Exception e) {
             e.printStackTrace();
             return null;
+        }
+    }
+    
+    public Produto buscarPorId(int id) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Produto.class, id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
+    public void atualizar(Produto produto) throws Exception {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(produto);
+            em.getTransaction().commit();
+        } catch (Exception e) {
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+            throw e;
         }
     }
 }

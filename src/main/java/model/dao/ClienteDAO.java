@@ -21,14 +21,14 @@ public class ClienteDAO extends PersistenciaJPA{
     }
     
     public List<Cliente> listaClientes(){
-    EntityManager em = getEntityManager();
+        EntityManager em = getEntityManager();
         try {
             TypedQuery<Cliente> query
-                    = em.createQuery("SELECT v FROM Cliente v", Cliente.class);
+                    = em.createQuery("SELECT c FROM Cliente c", Cliente.class);
             return query.getResultList();
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return new java.util.ArrayList<>();
         }
     }
 }
